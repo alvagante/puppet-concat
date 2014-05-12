@@ -18,7 +18,10 @@ class concat::setup {
       root => 0,
       default => $id
     }
-    $concatdir = '/var/lib/puppet/concat'
+    $concatdir = $::operatingsystem ? {
+      /(?i:OpenBSD)/ => '/var/puppet/concat',
+      default        => '/var/lib/puppet/concat'
+    }
     $majorversion = regsubst($::puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
 
     file{"${concatdir}/bin/concatfragments.sh":
